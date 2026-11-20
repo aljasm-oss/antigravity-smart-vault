@@ -1,23 +1,27 @@
 # Contributing to Antigravity Smart Skill Vault 🤝
 
-Welcome! **The door is completely open** for developers, AI engineers, and community members who want to improve this architecture, build new features, or adapt it to more agent ecosystems.
+Welcome! **Everyone is welcome here — whether you are a complete beginner with a great idea or a seasoned developer.** We keep contributing simple, friendly, and barrier-free.
 
-## Ways to Contribute
-- **Semantic / Embedding Search:** Upgrade `--search` with optional BM25 or local embeddings while keeping zero-dependency fallback.
-- **Tech-Stack Auto-Detection:** Add an `--auto-scope --project .` mode that detects `next.config.ts`, `pubspec.yaml`, `sf.jsonc`, `firebase.json`, etc., and automatically scopes matching skills into `.agents/skills/`.
-- **Cross-Harness Support:** Extend support to **Gemini CLI**, **Claude Code**, **Cursor**, and **Windsurf**.
-- **Bug Reports & Ideas:** Open an Issue on GitHub with your IDE version, OS, and token budget breakdown.
+## How Anyone Can Contribute (No Complex Rules!)
+You don't need to write complex code to help make this tool better:
+- 💡 **Share an Idea or Suggestion:** Open a GitHub Issue and describe what would make Antigravity smoother for you.
+- 🐛 **Report a Bug:** Tell us what happened on your OS (Windows / macOS / Linux) so we can fix it together.
+- 📖 **Improve Docs or Translations:** Help clarify explanations for beginners or add another language.
+- 🛠️ **Submit Code Improvements (Pull Request):** Fork the repo, make your change, and open a Pull Request — big or small, every contribution counts!
 
-## Pull Request Guidelines
-1. Fork the repository and create a descriptive feature branch (`git checkout -b feat/your-improvement`).
-2. Keep the core `smart_vault.py` script dependency-free (Python 3.8+ standard library) so any user can run it out of the box.
-3. Retain the [`NOTICE`](./NOTICE) and [`LICENSE`](./LICENSE) attribution notices in all derivative works per Apache License 2.0.
-4. Open a Pull Request describing the problem solved and before/after token measurements.
+## Ideas We'd Love to Build Together
+- **Tech-Stack Auto-Detection:** Automatically detect `next.config.ts`, `pubspec.yaml`, `sf.jsonc`, etc., and scope matching skills to that project.
+- **Cross-Tool Support:** Extend support to **Gemini CLI**, **Claude Code**, **Cursor**, and **Windsurf**.
+- **Smarter Search:** Optional semantic/BM25 search while keeping the fast zero-dependency Python default.
+
+*(All contributors will be credited in `README.md`. Please keep the `NOTICE` and `LICENSE` files intact per Apache-2.0 so everyone's work stays properly credited.)*
 
 ---
 
-## المساهمة في تطوير المشروع (بالعربية)
-الباب مفتوح بالكامل لكل مطور ومهندس ذكاء اصطناعي يرغب في تطوير هذه الفكرة أو المشاركة في تحسينها:
-1. اعمل **Fork** للمستودع وأنشئ فرعاً جديداً (`Branch`) للميزة أو التحسين الذي تقترحه.
-2. افتح **Pull Request** أو **Issue** مع شرح واضح لفكرتك وأثرها في توفير التوكنات أو تحسين تجربة المستخدم.
-3. يُرجى الحفاظ على ملفّي الإشعار والرخصة (`NOTICE` و`LICENSE`) وفق رخصة Apache 2.0.
+## المساهمة والتطوير المشترك (بالعربية — بكل بساطة وبدون تعقيد!)
+
+أهلاً وسهلاً بك! **الباب مفتوح للجميع سواء كنتَ مبتدئاً لديك فكرة ذكية أو مبرمجاً خبيراً.** لا نريد أي تعقيد أو شروط صعبة للمشاركة:
+- 💡 **لديك فكرة أو اقتراح؟** افتح `Issue` واكتبها ببساطة بالعربية أو الإنجليزية.
+- 🐛 **واجهت مشكلة على جهازك؟** أخبرنا بها لنتعاون على حلها معاً.
+- 📖 **تريد تحسين الشرح أو الترجمة؟** مساهمتك محل ترحيب كبير.
+- 🛠️ **تريد تطوير الكود؟** اعمل `Fork` وعدّل ما تراه مناسباً وأرسل `Pull Request` وسيُذكر اسمك في قائمة المساهمين.
