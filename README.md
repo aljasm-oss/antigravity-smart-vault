@@ -94,10 +94,26 @@ python smart_vault.py --restore
 This tool was built to help everyone get the best out of AI coding agents — **contributions from beginners and experts alike are always welcome!**  
 Want to suggest an idea, improve docs, or add a feature? Open an **Issue** or **Pull Request** anytime — see [`CONTRIBUTING.md`](./CONTRIBUTING.md) (no complicated hoops!).
 
-**Core Contributors:**
-* **Elgasem** (`@aljasm-oss`) — Problem Discovery, Architecture & Product Direction
-* **Google Antigravity AI Agent** — Collaborative Engineering, Implementation & Verification
-* *Your name can be next — PRs and ideas are always open!* 🌟
+<table>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/aljasm-oss">
+        <img src="https://github.com/aljasm-oss.png?size=100" width="80px;" style="border-radius:50%;" alt="Elgasem"/><br />
+        <sub><b>Elgasem</b></sub>
+      </a><br />
+      <sub>Creator & Architect</sub>
+    </td>
+    <td align="center">
+      <a href="https://antigravity.google">
+        <img src="https://avatars.githubusercontent.com/in/956858?v=4" width="80px;" style="border-radius:50%;" alt="Google Antigravity AI"/><br />
+        <sub><b>Google Antigravity</b></sub>
+      </a><br />
+      <sub>AI Co-Author (Gemini)</sub>
+    </td>
+  </tr>
+</table>
+
+*Your avatar can be right next to ours — PRs, translations, and ideas are always open!* 🌟
 
 ---
 
