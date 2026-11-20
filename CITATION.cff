@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "If you use, fork, or build upon Antigravity Smart Skill Vault, please cite it as below."
+authors:
+  - name: "Elgasem"
+    email: "aljasmabrahym943@gmail.com"
+title: "Antigravity Smart Skill Vault: Two-Tier On-Demand Skill Router & Project Scoper for Google Antigravity IDE"
+version: 1.0.0
+date-released: 2026-11-21
+url: "https://github.com/aljasm-oss/antigravity-smart-vault"
+repository-code: "https://github.com/aljasm-oss/antigravity-smart-vault"
+license: Apache-2.0
+keywords:
+  - google-antigravity
+  - agent-skills
+  - token-optimization
+  - progressive-disclosure
+  - mcp
+  - context-engineering
