@@ -2,7 +2,7 @@ cff-version: 1.2.0
 message: "If you use, fork, or build upon Antigravity Smart Skill Vault, please cite it as below."
 authors:
   - name: "Elgasem"
-    email: "aljasmabrahym943@gmail.com"
+    website: "https://github.com/aljasm-oss"
   - name: "Google Antigravity AI Agent"
     website: "https://antigravity.google"
 title: "Antigravity Smart Skill Vault: Two-Tier On-Demand Skill Router & Project Scoper for Google Antigravity IDE"

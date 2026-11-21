@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Antigravity Smart Skill Vault & Project-Scoped Router (agy-smart-vault)
-Architected & Designed by: Elgasem (aljasmabrahym943@gmail.com)
+Architected & Designed by: Elgasem (https://github.com/aljasm-oss)
 License: Apache License 2.0 (Attribution Required - see NOTICE)
 
 Solves the Antigravity IDE 'Customization token budget exceeded' (20,000-token limit)
@@ -19,7 +19,7 @@ import shutil
 import sys
 from pathlib import Path
 
-AUTHOR_SIGNATURE = "Elgasem (aljasmabrahym943@gmail.com)"
+AUTHOR_SIGNATURE = "Elgasem (https://github.com/aljasm-oss)"
 VERSION = "1.0.0"
 
 DEFAULT_CONFIG_DIR = Path.home() / ".gemini" / "config"

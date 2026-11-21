@@ -138,7 +138,15 @@ Want to suggest an idea, improve docs, or add a feature? Open an **Issue** or **
 
 ---
 
+## 💬 Contact & Feedback (التواصل والرسائل)
+
+All questions, ideas, collaboration proposals, and feedback are welcome directly on GitHub:
+* **General Messages, Ideas & Collaborations:** [GitHub Discussions](https://github.com/aljasm-oss/antigravity-smart-vault/discussions)
+* **Bug Reports & Feature Requests:** [GitHub Issues](https://github.com/aljasm-oss/antigravity-smart-vault/issues)
+
+---
+
 ## 🛡️ License & Attribution (الحقوق والرخصة)
 
-Copyright © 2026 **Elgasem** (`aljasmabrahym943@gmail.com`) — *Co-developed with Google Antigravity AI Agent*.  
+Copyright © 2026 **Elgasem** ([`@aljasm-oss`](https://github.com/aljasm-oss)) — *Co-developed with Google Antigravity AI Agent*.  
 Licensed under **Apache License 2.0** (see [`LICENSE`](./LICENSE) & [`NOTICE`](./NOTICE)). Anyone is free to use, improve, and share this tool while retaining the [`NOTICE`](./NOTICE) and [`CITATION.cff`](./CITATION.cff) attribution files.
