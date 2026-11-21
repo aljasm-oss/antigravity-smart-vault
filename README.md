@@ -104,11 +104,11 @@ Want to suggest an idea, improve docs, or add a feature? Open an **Issue** or **
       <sub>Creator & Architect</sub>
     </td>
     <td align="center">
-      <a href="https://antigravity.google">
-        <img src="https://avatars.githubusercontent.com/in/956858?v=4" width="80px;" style="border-radius:50%;" alt="Google Antigravity AI"/><br />
+      <a href="https://github.com/google-antigravity">
+        <img src="https://avatars.githubusercontent.com/u/242056456?v=4" width="80px;" style="border-radius:50%;" alt="Google Antigravity"/><br />
         <sub><b>Google Antigravity</b></sub>
       </a><br />
-      <sub>AI Co-Author (Gemini)</sub>
+      <sub>AI Co-Author</sub>
     </td>
   </tr>
 </table>
