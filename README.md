@@ -1,9 +1,21 @@
-# ⚡ Antigravity Smart Skill Vault (`agy-smart-vault`)
+# ⚡ Antigravity Smart Skill Vault (`agy-smart-vault` v2.0.1)
 
-> **Keep Google Antigravity IDE fast, save your AI usage quota, and fix the red `Customization token budget exceeded` warning — cutting Global Skill token overhead by `90.3%` while keeping `100%` of your MCP servers, OAuth logins, Subagents (`browser`, `research`), and Google Workspace tools working.**
+> **Keep Google Antigravity fast, save your AI usage quota, and fix the red `Customization token budget exceeded` warning — cutting Global Skill token overhead by `90%+` while keeping your MCP servers, OAuth logins, Subagents (`browser`, `research`), and Google Workspace plugins untouched.**
 
 **Created & Co-Developed by:** **Elgasem** & **Google Antigravity AI Agent**  
 **License:** Apache-2.0 (`LICENSE` & `NOTICE`) | **[📖 الشرح العربي الكامل بالأسفل](#-الشرح-العربي-المبسّط-والشامل-للمبتدئ-وللخبير)**
+
+---
+
+## ✨ What's New in `v2.0.1` (Option A: Opt-In, Auto-Prune & Update-Safe)
+
+1. **Strict Opt-In Policy for Cloud Plugins (`vault_policy.json`):** `--sync` **never** silently sweeps brand-new Marketplace plugins or touches Google core plugins (`gcalendar`, `gdocs`, `gdrive`, `gmail`, `gemini-api`, `google-antigravity-sdk`, etc.). Opt plugins in explicitly via `--vault-plugin <name>` (or one-time `--vault-all-plugins`) and restore any single plugin via `--unvault-plugin <name>`.
+2. **Auto-Prune on Uninstall:** When you uninstall a plugin from Antigravity, `--sync` automatically removes its leftover vaulted skills and refreshes the catalog (zero ghost entries).
+3. **Upstream Update Sync:** When an opted-in plugin receives a Marketplace update, `--sync` atomically replaces its vaulted copy — picking up new skills, updated docs, and removed skills cleanly.
+4. **Disable vs. Uninstall Awareness (Read-Only `config.json`):** Temporarily disabling a plugin (`enabled: false`) hides it from the active `smart-skill-catalog` without deleting its vaulted files — and re-enabling brings it right back.
+5. **Direct Ephemeral Read (`--read <skill>`):** Read any vaulted skill directly in the same turn with **zero `git status` pollution** in your project (use `--use` only when you want persistent `.agents/skills/` scoping).
+6. **Permanent Delete (`--remove <skill>`) & Safe Rollback (`--restore`):** `--remove` deletes a skill from both active folders and the vault; `--restore` clears `opted_in_plugins` cleanly so scheduled background sync won't re-vault restored plugins.
+7. **Silent Zero-Token Background Auto-Sync (`--sync --quiet`):** Atomic file writes + silent no-op when clean, ideal for Windows Task Scheduler (`pythonw.exe`) or macOS/Linux `cron`.
 
 ---
 
@@ -11,88 +23,107 @@
 
 ### 🌱 If You Are a Beginner (Plain Language — Zero Jargon)
 Imagine your AI assistant works at a **desk** that holds **20,000 tokens** of tool instructions:
-- Every time you install plugins from the Antigravity Marketplace (like Flutter, Figma, Canva, Neo4j, Spacefast, Firecrawl), each plugin puts **10 to 37 instruction cards (Skills)** on that desk — in **every single project** you open!
+- Every time you install plugins from the Antigravity Marketplace (like Flutter, Figma, Canva, Neo4j, n8n, Firecrawl), each plugin puts **10 to 37 instruction cards (Skills)** on that desk — in **every single project** you open!
 - Soon, the desk overflows (**`169.6%` full 🔴**). When that happens:
   1. **Your AI usage limit (Quota) drains much faster** on every message.
   2. **Important built-in tools stop working** — Antigravity automatically kicks out `60+` skills AND kicks out the **`browser`** and **`research`** assistants!
   3. **Turning off plugins isn't a good fix**, because turning off a plugin also disconnects its live tools (like Canva or Figma).
 
-**What `antigravity-smart-vault` does in 1 click:**
-- Think of it as adding a **smart filing cabinet (`smart_vault`)** right next to the AI's desk.
-- It moves the heavy, rarely used skill cards off the desk and into the cabinet — **without deleting anything and without turning off a single plugin or live connection!**
-- Whenever you actually ask for something (like Canva or Flutter), the AI opens the cabinet in **less than 0.02 seconds**, grabs the exact skill card you need, and places a copy **only inside the project that needs it (`.agents/skills/`)**.
-- **Result:** Your desk drops from **`169.6% 🔴` to `62.1% 🟢`**, your **`browser` & `research` tools immediately start working again**, and your AI quota lasts dramatically longer!
+**What `antigravity-smart-vault` does:**
+- Think of it as adding a **smart filing cabinet (`smart_vault`)** right next to the AI's desk, with **each plugin neatly isolated in its own drawer**.
+- It moves heavy, rarely used skill cards off the desk and into the cabinet — **without deleting anything, without turning off a single MCP server or OAuth login, and without ever touching Google's core plugins!**
+- Whenever you ask for something (like Canva, Figma, n8n, or Flutter), the AI opens the cabinet in **less than 0.02 seconds**, reads the exact skill directly (`--read`) without cluttering your repo, or copies it into that single project (`.agents/skills/`) when needed (`--use`).
 
 ---
 
 ### ⚙️ If You Are an Engineer / Expert (Technical Architecture)
 
-When 15–20 multi-skill plugins (e.g., *Flutter* [25], *Neo4j* [30], *Figma* [16], *Firebase* [13], *Spacefast* [13], *Firecrawl* [37]) are installed globally in `~/.gemini/config/`, YAML frontmatter descriptions alone exceed **`25,000–30,000 tokens` (`125%–150%`)**. Because `Skills`, `Subagents`, and `Lazy MCP Tools` share a single `20,000-token` `Other Customizations` pool, Antigravity evicts dozens of skills and core built-in subagents (`browser`, `research`).
+When 15–20 multi-skill plugins are installed globally in `~/.gemini/config/`, YAML frontmatter descriptions alone exceed **`25,000–30,000 tokens` (`125%–150%`)**. Because `Skills`, `Subagents`, and `Lazy MCP Tools` share a single `20,000-token` `CustomizationTokenBudget`, Antigravity evicts dozens of skills and core built-in subagents (`browser`, `research`).
 
-**`antigravity-smart-vault`** introduces a native, zero-daemon **Two-Tier Progressive Disclosure & Project-Scoped Routing** pattern:
+**`antigravity-smart-vault`** implements a zero-daemon **Two-Tier Progressive Disclosure & Opt-In Lifecycle Manager**:
 
 ```mermaid
 flowchart LR
-    A["20+ Marketplace Plugins<br/>(211 Skills / 169.6% Budget 🔴)"] --> B["python smart_vault.py --sync"]
-    B --> C["Clean Global Context<br/>(22 Core Skills / 62.1% Total 🟢)"]
-    B --> D["Central Smart Vault<br/>(~/.gemini/config/smart_vault/)"]
-    C --> C1["✅ 100% MCP Servers & OAuth Active"]
-    C --> C2["✅ browser & research Subagents Restored"]
-    C --> C3["✅ Official Google Plugins & Core UI Skills"]
-    C --> C4["⚡ Instant CLI Router (<20ms / vault_index.json)"]
-    C4 -- "--search / --use" --> D
-    D -- "Copies only needed skills into" --> E["Isolated Project Scope<br/>(<ProjectRoot>/.agents/skills/)"]
+    A["Installed Plugins & Local Skills<br/>(200+ Skills / >150% Budget 🔴)"] --> B["python smart_vault.py --sync"]
+    B --> C["Clean Global Context<br/>(15 Core/Google Skills / 94% Saved 🟢)"]
+    B --> D["Isolated Smart Vault<br/>(~/.gemini/config/smart_vault/)"]
+    C --> C1["✅ MCP Servers & OAuth Intact"]
+    C --> C2["✅ browser & research Restored"]
+    C --> C3["✅ Google Core & New Cloud Plugins Untouched"]
+    C --> C4["⚡ Dynamic Router (<20ms / vault_index.json)"]
+    C4 -- "--read (zero git diff)" --> D
+    C4 -- "--use --project ." --> E["Project Scope<br/>(<ProjectRoot>/.agents/skills/)"]
 ```
 
-1. **Plugin Skill Decoupling (Zero MCP / OAuth Breakage):** Moves plugin `skills/` subdirectories (and root-level `*-skill` directories like Neo4j) into `~/.gemini/config/smart_vault/plugins/` while keeping every plugin **`enabled: true`** in `config.json` — preserving 100% of `mcp_config.json` servers, OAuth sessions, `rules/`, and `agents/`.
-2. **Sub-20ms Local Index Search (`--search`):** Compiles all vaulted skills into `vault_index.json` so agents query 200+ skills in `<20ms` using `<30 tokens`.
-3. **Automatic Project Scoping (`--use <skill-or-plugin> --project .`):** Installs needed skills exclusively into `<WorkspaceRoot>/.agents/skills/` rather than re-polluting Global discovery.
-4. **Safe 1-Click Rollback (`--restore`):** Moves every vaulted skill back to its original global location cleanly at any time.
+1. **Plugin Skill Decoupling (Opt-In Only):** Manages opted-in non-Google plugins via `vault_policy.json` while keeping `mcp_config.json`, OAuth tokens, `rules/`, and `agents/` intact. Never writes to `config.json`.
+2. **Sub-20ms Local Search & Same-Turn Read (`--search` / `--read`):** Queries `vault_index.json` in `<20ms` and loads only the exact requested `SKILL.md` ephemerally.
+3. **Lifecycle Sync (`--sync`):** Auto-prunes uninstalled plugins, atomically refreshes updated opted-in plugins, hides temporarily disabled plugins (`enabled: false` in `config.json`), and auto-generates `smart-skill-catalog/SKILL.md`.
+4. **Safe 1-Click Rollback (`--restore` / `--unvault-plugin`):** Restores skills cleanly and clears `opted_in_plugins`.
 
 ---
 
-### 📊 Verified Real-World Impact (Measured Live in Antigravity IDE)
+### 📊 Verified Real-World Impact (Measured Live in Antigravity)
 
-| Metric | Before `agy-smart-vault` | After `agy-smart-vault` | Improvement |
+| Metric | Before `agy-smart-vault` | After `agy-smart-vault` v2.0.1 | Improvement |
 | :--- | :-: | :-: | :--- |
-| **Global Skills Loaded** | `211` skills (`~30,730 tokens`) | `22` core/Google skills (`~2,991 tokens`) | **🔥 90.3% Skill Token Reduction** |
-| **Total `Other Customizations`** | 🔴 `33,915 / 20,000` (`169.6%`) | 🟢 `11,816 / 20,000` (`62.1%`) | **Saves ~27,739 skill tokens per turn** |
-| **Excluded Skills & Subagents** | 🔴 `61 skills` + `2 subagents` (`browser`, `research`) | 🟢 **`0 excluded`** | **`browser` & `research` 100% restored** |
-| **Active MCP Servers & OAuth** | `100%` | 🟢 **`100%`** | **Zero plugins or MCP servers disabled** |
+| **Global Skills Loaded** | `207+` skills (`~31,500+ tokens`) | `15` core/Google skills (`~1,901 tokens`) | **🔥 94.0% Skill Token Reduction** |
+| **Excluded Skills & Subagents** | 🔴 `61 skills` + `browser` & `research` | 🟢 **`0 excluded`** | **`browser` & `research` restored** |
+| **Active MCP Servers & OAuth** | `100%` | 🟢 **`100%`** | **Zero plugins or MCP servers broken** |
+| **Google Core & New Cloud Plugins** | — | 🟢 **Protected by Policy** | **Never modified automatically** |
 
 ---
 
 ### 🚀 1-Minute Setup (Windows / macOS / Linux)
 
-Only Python 3.8+ is needed — **zero external libraries to install (`no pip install`):**
+Only Python 3.10+ is needed — **zero external dependencies (`no pip install`):**
 
 ```bash
-# 1. Download this repository (or just download smart_vault.py)
+# 1. Clone this repository (or download smart_vault.py)
 git clone https://github.com/aljasm-oss/antigravity-smart-vault.git
 cd antigravity-smart-vault
 
-# 2. Organize heavy global skills into the Smart Vault (100% safe & reversible)
-python smart_vault.py --sync
-
-# 3. See your instant token savings report
+# 2. Check current token usage & vault policy
 python smart_vault.py --status
 
-# 4. Search any vaulted skill in <20ms
+# 3. Opt in specific heavy non-Google plugins (or all non-Google plugins once)
+python smart_vault.py --vault-plugin "figma"
+# Or explicitly opt in all currently installed non-Google plugins once:
+python smart_vault.py --vault-all-plugins
+
+# 4. Sync local skills, plugin updates & auto-prune uninstalled plugins
+python smart_vault.py --sync
+
+# 5. Search or read any vaulted skill directly (zero git pollution!)
 python smart_vault.py --search "canva resize"
+python smart_vault.py --read "resize-for-social-media"
 
-# 5. Copy a skill (or a whole plugin's skills) into ONE project only (.agents/skills/)
-python smart_vault.py --use "spacefast" --project "/path/to/your-project"
+# 6. Scope a skill (or whole plugin) into ONE project only (.agents/skills/)
+python smart_vault.py --use "flutter" --project "/path/to/your-project"
 
-# 6. Want to undo everything at any time? Run:
+# 7. Restore a single plugin or undo everything cleanly
+python smart_vault.py --unvault-plugin "figma"
 python smart_vault.py --restore
 ```
+
+#### ⏱️ Optional: Silent Automatic Background Sync (`0` Tokens / `0` Idle RAM)
+- **Windows (Task Scheduler via PowerShell — zero console popup using `pythonw.exe`):**
+  ```powershell
+  $action = New-ScheduledTaskAction -Execute "pythonw.exe" -Argument '"C:\path\to\smart_vault.py" --sync --quiet'
+  $t1 = New-ScheduledTaskTrigger -AtLogOn -User $env:USERNAME
+  $t2 = New-ScheduledTaskTrigger -Once -At (Get-Date).AddMinutes(5) -RepetitionInterval (New-TimeSpan -Hours 6) -RepetitionDuration (New-TimeSpan -Days 3650)
+  Register-ScheduledTask -TaskName "AntigravitySmartVaultSync" -Action $action -Trigger @($t1, $t2) -Force
+  ```
+- **macOS / Linux (`crontab -e`):**
+  ```cron
+  0 */6 * * * /usr/bin/python3 /path/to/smart_vault.py --sync --quiet
+  ```
 
 ---
 
 ### 🤝 Contributors & Open Collaboration
 
 This tool was built to help everyone get the best out of AI coding agents — **contributions from beginners and experts alike are always welcome!**  
-Want to suggest an idea, improve docs, or add a feature? Open an **Issue** or **Pull Request** anytime — see [`CONTRIBUTING.md`](./CONTRIBUTING.md) (no complicated hoops!).
+Want to suggest an idea, improve docs, or add a feature? Open an **Issue** or **Pull Request** anytime — see [`CONTRIBUTING.md`](./CONTRIBUTING.md).
 
 <table>
   <tr>
@@ -113,34 +144,25 @@ Want to suggest an idea, improve docs, or add a feature? Open an **Issue** or **
   </tr>
 </table>
 
-*Your avatar can be right next to ours — PRs, translations, and ideas are always open!* 🌟
-
 ---
 
 ## 🇸🇦 الشرح العربي المبسّط والشامل (للمبتدئ وللخبير)
 
-### 🌱 ما هي هذه الأداة ببساطة؟ (شرح للمبتدئين بدون مصطلحات معقدة)
-تخيّل أن الذكاء الاصطناعي في برنامج **Google Antigravity** يعمل على **«طاولة مكتب»** تتسع فقط لـ **`20,000` توكن** من بطاقات تعريف المهارات والأدوات:
-* كلما ثبّتَّ إضافات من المتجر (مثل Flutter أو Figma أو Canva أو Neo4j أو Spacefast أو Firecrawl)، تضع كل إضافة **من 10 إلى 37 بطاقة مهارة** فوق هذه الطاولة — في **كل مشروع** تفتحه حتى لو لم تستخدمها فيه!
-* والنتيجة أن الطاولة تمتلئ وتفيض (**`169.6%` 🔴**)، فيحدث 3 مشاكل مزعجة:
-  1. **يُستنزف رصيدك من استخدام الذكاء الاصطناعي (`Quota`) بسرعة كبيرة** مع كل رسالة.
-  2. **تتوقف أدوات أساسية عن العمل تلقائياً** — يقوم البرنامج بطرد أكثر من `60` مهارة وطرد **وكيل المتصفح (`browser`)** و**وكيل البحث (`research`)**!
-  3. **وإيقاف الإضافات ليس حلاً جيداً**، لأنك إذا أطفأت الإضافة تنقطع معها وصلة الربط الحية (`MCP`) وتسجيل الدخول.
+### 🌱 ما هي هذه الأداة ببساطة؟
+تخيّل أن الذكاء الاصطناعي في **Google Antigravity** يعمل على **«طاولة مكتب»** تتسع فقط لـ **`20,000` توكن** من بطاقات المهارات والأدوات:
+* كلما ثبّتَّ إضافات ضخمة (مثل Flutter أو Figma أو Canva أو Neo4j أو n8n أو Firecrawl)، تضع كل إضافة **من 10 إلى 37 بطاقة مهارة** فوق الطاولة في **كل محادثة** حتى لو لم تستخدمها فيها!
+* فتمتلئ الطاولة ويُستنزف الليمت بسرعة ويضطر البرنامج لطرد مهارات ووكلاء أساسيين مثل **`browser`** و**`research`**.
 
-**كيف تحلّ أداة `antigravity-smart-vault` المشكلة بضغطة واحدة؟**
-* تخيّل أننا نضع **«خزنة فهرس ذكية» (`smart_vault`)** بجانب طاولة الذكاء الاصطناعي.
-* تنقل الأداة بطاقات المهارات الثقيلة غير المستخدمة يومياً من الطاولة إلى الخزنة — **دون حذف أي ملف، ودون فصل أي إضافة أو فيش ربط (`MCP`)، ومع إبقاء كل إضافات Google الرسمية شغالة 100%!**
-* وعندما تطلب في أي محادثة استخدام أداة معينة (مثل Canva أو Flutter أو Spacefast)، يبحث الذكاء الاصطناعي في الخزنة في **أقل من 0.02 ثانية**، يسحب المهارة المطلوبة، ويضع نسخة منها **داخل ذلك المشروع فقط (`.agents/skills/`)** حتى لا تثقل باقي مشاريعك!
-* **النتيجة الفورية:** ينزل ضغط الطاولة من **`169.6% 🔴`** إلى **`62.1% 🟢`** (توفير **`90.3%`** من توكنات المهارات!)، ويعود **وكيل المتصفح (`browser`) ووكيل البحث (`research`)** للعمل فوراً، وتستطيع استعادة الوضع السابق في أي وقت بأمر واحد (`--restore`).
-
-### 🤝 المساهمون والتطوير المشترك (الباب مفتوح للجميع بكل بساطة!)
-صُنعت هذه الأداة بالتعاون المشترك بين **`Elgasem`** و**`Google Antigravity AI Agent`** لخدمة المجتمع، **والباب مفتوح بالكامل للجميع دون أي تعقيد** — سواء كنت مبتدئاً لديك فكرة مفيدة أو مبرمجاً تريد إضافة ميزة جديدة عبر **Issues** أو **Pull Requests**. راجع [`CONTRIBUTING.md`](./CONTRIBUTING.md).
+**كيف تحلّ `antigravity-smart-vault v2.0.1` المشكلة بأمان؟**
+* تضيف **خزنة منظَّمة ومجزّأة (`smart_vault`)** — كل إضافة لها درج معزول خاص بها — وتبقي كل فيش الربط (`MCP`) وتسجيلات الدخول (`OAuth`) شغّالة بدون أي انقطاع.
+* **حماية كاملة لقدرات Google والإضافات السحابية الجديدة (الخيار أ):** لا تقترب الأداة أبداً من إضافات Google الأساسية (`Gmail`, `Drive`, `Calendar`, `Gemini API`, `SDK`...)، ولا تسحب أي إضافة سحابية جديدة تلقائياً إلا بطلبك (`--vault-plugin`).
+* **تنظيف وتحديث تلقائي:** عند حذف أي إضافة تُمسح مهاراتها من الخزنة تلقائياً، وعند تحديث إضافة مؤرشفة تُستبدل مهاراتها بالنسخة الجديدة تلقائياً، وعند **التعطيل المؤقت (`Disable`)** تُخفى من الفهرس النشط بدون حذف ملفاتها وتعود فور إعادة التفعيل!
+* **قراءة مباشرة بلا فوضى (`--read`):** يقرأ الذكاء الاصطناعي المهارة المطلوبة مباشرة في نفس اللحظة دون نسخ ملفات داخل مشروعك أو تلويث `git status` (مع إبقاء خيار `--use` لتثبيت مهارات داخل مشروع محدد عند الرغبة).
 
 ---
 
 ## 💬 Contact & Feedback (التواصل والرسائل)
 
-All questions, ideas, collaboration proposals, and feedback are welcome directly on GitHub:
 * **General Messages, Ideas & Collaborations:** [GitHub Discussions](https://github.com/aljasm-oss/antigravity-smart-vault/discussions)
 * **Bug Reports & Feature Requests:** [GitHub Issues](https://github.com/aljasm-oss/antigravity-smart-vault/issues)
 

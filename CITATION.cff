@@ -6,8 +6,8 @@ authors:
   - name: "Google Antigravity AI Agent"
     website: "https://antigravity.google"
 title: "Antigravity Smart Skill Vault: Two-Tier On-Demand Skill Router & Project Scoper for Google Antigravity IDE"
-version: 1.0.0
-date-released: 2026-11-21
+version: 2.0.1
+date-released: 2026-11-22
 url: "https://github.com/aljasm-oss/antigravity-smart-vault"
 repository-code: "https://github.com/aljasm-oss/antigravity-smart-vault"
 license: Apache-2.0
